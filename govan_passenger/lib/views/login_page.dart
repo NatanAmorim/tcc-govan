@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text('goVan - Manager'),
+          title: Text('goVan'),
         ),
         body: Container(
           child: Center(

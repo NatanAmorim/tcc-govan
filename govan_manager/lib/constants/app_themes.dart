@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Color(0xFF3469E9),
-  accentColor: Color(0xFF2376E5),
+  primaryColor: Color(0xFF009688),
+  accentColor: Color(0xFFFFA726),
   scaffoldBackgroundColor: Color(0xFFF6F5F5),
   textTheme: TextTheme(
     headline1: GoogleFonts.roboto(fontSize: 96.0, fontWeight: FontWeight.w300),
