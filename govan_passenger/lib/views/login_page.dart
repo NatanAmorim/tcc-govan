@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:govan/controllers/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,76 +10,86 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final controller = LoginController();
+
   @override
   void initState() {
     super.initState();
-    usernameController = TextEditingController();
-    passwordController = TextEditingController();
+    controller.usernameController = TextEditingController();
+    controller.passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
+    controller.usernameController.dispose();
+    controller.passwordController.dispose();
     super.dispose();
   }
-
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  late TextEditingController usernameController, passwordController;
-
-  bool _isObscurePassword = true;
-  bool _loggingIn = false;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          title: Text('goVan'),
-        ),
+        key: controller.scaffoldKey,
         body: Container(
+          color: Theme.of(context).primaryColor,
           child: Center(
-            child: Card(
-              child: Container(
-                height: 390,
-                width: 350,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Form(
-                    key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Fazer login',
-                          style: Theme.of(context).textTheme.headline4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Bem Vindo a goVan!',
+                  style: GoogleFonts.roboto(
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Container(
+                    height: 380,
+                    width: 350,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Form(
+                        key: controller.formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Fazer login',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _buildUserTextField(),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _buildPasswordTextField(),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _buildLoginButton(),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                            _buildTextLinks(),
+                          ],
                         ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _buildUserTextField(),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        _buildPasswordTextField(),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        _buildLoginButton(),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        _buildTextLinks(),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -88,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUserTextField() {
     return TextFormField(
-      controller: usernameController,
+      controller: controller.usernameController,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Digite seu nome de usuário';
@@ -116,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildPasswordTextField() {
     return TextFormField(
-      controller: passwordController,
+      controller: controller.passwordController,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Digite a sua senha';
@@ -127,25 +138,45 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: GoogleFonts.roboto(),
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => login(),
-      obscureText: _isObscurePassword,
+      onFieldSubmitted: (_) async {
+        setState(() {
+          controller.isLoggingIn = true;
+        });
+        try {
+          final response = controller.login(); // TODO: get return value
+          // if (isLoggedIn) {
+          //   Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
+          //   (Route<dynamic> route) => false,
+          // );
+          // }
+        } finally {
+          setState(() {
+            controller.isLoggingIn = false;
+          });
+        }
+      },
+      obscureText: controller.isObscurePassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        hintText: "Digite sua Senha",
-        labelText: "Digite sua Senha",
+        hintText: "Senha",
+        labelText: "Senha",
         hintStyle: GoogleFonts.roboto(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            _isObscurePassword ? Icons.visibility : Icons.visibility_off,
+            controller.isObscurePassword
+                ? Icons.visibility
+                : Icons.visibility_off,
             color: Colors.grey[600],
           ),
           onPressed: () => setState(() {
-            _isObscurePassword = !_isObscurePassword;
+            controller.isObscurePassword = !controller.isObscurePassword;
           }),
         ),
         prefixIcon: Icon(
@@ -191,12 +222,15 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(50.0),
           )),
         ),
-        onPressed: _loggingIn ? null : () => login(),
+        onPressed: controller.isLoggingIn ? null : () => controller.login(),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: _loggingIn
-              ? CircularProgressIndicator(
-                  color: Colors.white,
+          child: controller.isLoggingIn
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: LinearProgressIndicator(
+                    color: Colors.purpleAccent,
+                  ),
                 )
               : Text(
                   "ENTRAR",
@@ -205,44 +239,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  login() async {
-    setState(() {
-      _loggingIn = !_loggingIn;
-    });
-    try {
-      bool isLoggedIn = await auth();
-
-      // if (isLoggedIn) {
-      //   Get.off(() => PacScreen());
-      // }
-    } finally {
-      setState(() {
-        _loggingIn = !_loggingIn;
-      });
-    }
-  }
-
-  Future<bool> auth() async {
-    final isValid = formKey.currentState!.validate();
-
-    if (!isValid) {
-      return false;
-    }
-
-    var request = <String, String>{
-      'usuario_username': usernameController.text,
-      'usuario_senha': passwordController.text,
-    };
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (usernameController.text == 'admin' &&
-        passwordController.text == 'admin') {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
