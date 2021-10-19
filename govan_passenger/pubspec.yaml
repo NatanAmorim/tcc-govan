@@ -2,7 +2,7 @@ name: govan
 description: govan para passagueiros.
 version: 0.1.0
 
-# publish_to: 'none'
+publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -10,19 +10,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^4.0.0
-  hive: ^2.0.4
   google_fonts: ^2.0.0
-
+  http: ^0.13.3
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.0.4
-
+  flutter_lints: ^1.0.0
+  hive_generator: ^1.1.0
 flutter:
   assets:
     - assets/images/
-    - assets/database/
 
   uses-material-design: true
