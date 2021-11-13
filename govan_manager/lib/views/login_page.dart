@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govan/controllers/login_controller.dart';
+import 'package:govan/views/cadastro_page.dart';
 import 'package:govan/views/meus_servicos_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    controller.isLoggingIn = false;
+
     controller.emailController = TextEditingController();
     controller.senhaController = TextEditingController();
   }
@@ -27,9 +30,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   bool _isObscurePassword = true;
   bool _loggingIn = false;
 
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: scaffoldKey,
+        key: controller.scaffoldKey,
         appBar: AppBar(
           title: Text('goVan - Manager'),
         ),
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Form(
-                    key: formKey,
+                    key: controller.formKey,
                     autovalidateMode: AutovalidateMode.disabled,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -166,11 +166,24 @@ class _LoginPageState extends State<LoginPage> {
             decoration: TextDecoration.underline,
           ),
         ),
-        Text(
-          "Criar conta",
-          style: TextStyle(
-            color: Colors.blue[800],
-            decoration: TextDecoration.underline,
+        InkWell(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const CadastroPage()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Criar conta",
+              style: TextStyle(
+                color: Colors.blue[800],
+                decoration: TextDecoration.underline,
+              ),
+            ),
           ),
         ),
       ],

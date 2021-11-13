@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govan/controllers/login_controller.dart';
+import 'package:govan/views/cadastro_page.dart';
+import 'package:govan/views/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,86 +12,75 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final controller = LoginController();
+  final LoginController controller = LoginController();
 
   @override
   void initState() {
     super.initState();
-    controller.usernameController = TextEditingController();
-    controller.passwordController = TextEditingController();
+    controller.isLoggingIn = false;
+
+    controller.emailController = TextEditingController();
+    controller.senhaController = TextEditingController();
   }
 
   @override
   void dispose() {
-    controller.usernameController.dispose();
-    controller.passwordController.dispose();
+    controller.emailController.dispose();
+    controller.senhaController.dispose();
     super.dispose();
   }
+
+  bool _isObscurePassword = true;
+  bool _loggingIn = false;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         key: controller.scaffoldKey,
+        appBar: AppBar(
+          title: Text('goVan - Manager'),
+        ),
         body: Container(
-          color: Theme.of(context).primaryColor,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Bem Vindo a goVan!',
-                  style: GoogleFonts.roboto(
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Container(
-                    height: 380,
-                    width: 350,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Form(
-                        key: controller.formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Fazer login',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _buildUserTextField(),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _buildPasswordTextField(),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _buildLoginButton(),
-                            SizedBox(
-                              height: 15.0,
-                            ),
-                            _buildTextLinks(),
-                          ],
+            child: Card(
+              child: Container(
+                height: 390,
+                width: 350,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Form(
+                    key: controller.formKey,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Fazer login',
+                          style: Theme.of(context).textTheme.headline4,
                         ),
-                      ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _buildUserTextField(),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        _buildPasswordTextField(context: context),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        _buildLoginButton(),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        _buildTextLinks(),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -99,10 +90,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUserTextField() {
     return TextFormField(
-      controller: controller.usernameController,
+      controller: controller.emailController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Digite seu nome de usuário';
+          return 'Digite seu E-mail';
         }
         return null;
       },
@@ -116,8 +107,7 @@ class _LoginPageState extends State<LoginPage> {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        hintText: "Usuário",
-        labelText: "Usuário",
+        labelText: "E-mail",
         prefixIcon: Icon(
           Icons.person,
         ),
@@ -125,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildPasswordTextField() {
+  Widget _buildPasswordTextField({required BuildContext context}) {
     return TextFormField(
-      controller: controller.passwordController,
+      controller: controller.senhaController,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Digite a sua senha';
@@ -138,31 +128,12 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: GoogleFonts.roboto(),
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) async {
-        setState(() {
-          controller.isLoggingIn = true;
-        });
-        try {
-          final response = controller.login(); // TODO: get return value
-          // if (isLoggedIn) {
-          //   Navigator.pushAndRemoveUntil(
-          //   context,
-          //   MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
-          //   (Route<dynamic> route) => false,
-          // );
-          // }
-        } finally {
-          setState(() {
-            controller.isLoggingIn = false;
-          });
-        }
-      },
-      obscureText: controller.isObscurePassword,
+      onFieldSubmitted: (_) => login(context),
+      obscureText: _isObscurePassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        hintText: "Senha",
         labelText: "Senha",
         hintStyle: GoogleFonts.roboto(
           fontWeight: FontWeight.w400,
@@ -170,13 +141,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            controller.isObscurePassword
-                ? Icons.visibility
-                : Icons.visibility_off,
+            _isObscurePassword ? Icons.visibility : Icons.visibility_off,
             color: Colors.grey[600],
           ),
           onPressed: () => setState(() {
-            controller.isObscurePassword = !controller.isObscurePassword;
+            _isObscurePassword = !_isObscurePassword;
           }),
         ),
         prefixIcon: Icon(
@@ -197,11 +166,24 @@ class _LoginPageState extends State<LoginPage> {
             decoration: TextDecoration.underline,
           ),
         ),
-        Text(
-          "Criar conta",
-          style: TextStyle(
-            color: Colors.blue[800],
-            decoration: TextDecoration.underline,
+        InkWell(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const CadastroPage()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Criar conta",
+              style: TextStyle(
+                color: Colors.blue[800],
+                decoration: TextDecoration.underline,
+              ),
+            ),
           ),
         ),
       ],
@@ -222,15 +204,12 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(50.0),
           )),
         ),
-        onPressed: controller.isLoggingIn ? null : () => controller.login(),
+        onPressed: controller.isLoggingIn ? null : () => login(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: controller.isLoggingIn
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                  child: LinearProgressIndicator(
-                    color: Colors.purpleAccent,
-                  ),
+          child: _loggingIn
+              ? CircularProgressIndicator(
+                  color: Colors.white,
                 )
               : Text(
                   "ENTRAR",
@@ -239,5 +218,28 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  login(BuildContext context) async {
+    setState(() {
+      controller.isLoggingIn = !controller.isLoggingIn;
+    });
+    try {
+      final bool isLoggedIn = await controller.login(context: context);
+
+      if (isLoggedIn) {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } finally {
+      setState(() {
+        controller.isLoggingIn = !controller.isLoggingIn;
+      });
+    }
   }
 }

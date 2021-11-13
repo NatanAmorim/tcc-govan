@@ -15,7 +15,6 @@ class CadastroController {
 
   late TextEditingController nomeController;
   late TextEditingController rgController;
-  late TextEditingController cnhController;
   late TextEditingController cpfController;
   late TextEditingController cepController;
   late TextEditingController bairroController;
@@ -40,8 +39,7 @@ class CadastroController {
     final UsuarioModel request = UsuarioModel(
       email: emailController.text,
       senha: passwordController.text,
-      cnh: cnhController.text,
-      isMotorista: true,
+      isMotorista: false,
       pessoa: Pessoa(
         endereco: Endereco(
           cep: cepController.text,

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:govan/controllers/api_controller.dart';
 import 'package:govan/helper/api_helper.dart';
@@ -26,17 +25,14 @@ class LoginController {
       return false;
     }
 
-    final Digest encryptedPassword =
-        sha256.convert(utf8.encode(senhaController.text));
-
     final Map<String, dynamic> request = LoginModel(
-      email: senhaController.text,
-      senha: '$encryptedPassword',
+      email: emailController.text,
+      senha: senhaController.text,
     ).toJson();
 
     final response = await ApiHelper()
         .post(
-      api: '/user/login',
+      api: '/auth/login',
       payloadObject: request,
     )
         .catchError((dynamic error, dynamic stack) {
@@ -53,7 +49,7 @@ class LoginController {
       // LOGIN SUCESS, now get the response
       final Map<String, dynamic> responseJson = json.decode(response);
       // Store JWT token on HiveDB
-      final Box<dynamic> loggedUserBox = Hive.box('logged_user');
+      final Box<dynamic> loggedUserBox = Hive.box('jwt');
 
       await loggedUserBox.put(
         'token',

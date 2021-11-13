@@ -9,7 +9,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "goVan",
-      theme: lightTheme, //TODO: SWICH between light and dark theme
+      theme: lightTheme,
       home: LoginPage(),
     );
   }

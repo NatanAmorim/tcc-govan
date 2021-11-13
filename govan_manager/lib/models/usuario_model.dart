@@ -40,6 +40,7 @@ class UsuarioModel {
     required this.email,
     required this.senha,
     this.urlFoto,
+    this.cnh,
     this.createdAt,
     this.updatedAt,
     this.v,
@@ -53,6 +54,7 @@ class UsuarioModel {
   String email;
   String senha;
   String? urlFoto;
+  String? cnh;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
@@ -69,6 +71,7 @@ class UsuarioModel {
         id: json["_id"] == null ? null : json["_id"],
         email: json["email"] == null ? null : json["email"],
         senha: json["senha"] == null ? null : json["senha"],
+        cnh: json["cnh"] == null ? null : json["cnh"],
         urlFoto: json["url_foto"] == null ? null : json["url_foto"],
         createdAt: json["createdAt"] == null
             ? null
@@ -91,6 +94,7 @@ class UsuarioModel {
         "_id": id == null ? null : id,
         "email": email == null ? null : email,
         "senha": senha == null ? null : senha,
+        "cnh": cnh == null ? null : cnh,
         "url_foto": urlFoto == null ? null : urlFoto,
         "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
         "updatedAt": updatedAt == null ? null : updatedAt!.toIso8601String(),
