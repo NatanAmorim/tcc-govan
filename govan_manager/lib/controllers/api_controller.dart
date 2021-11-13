@@ -101,7 +101,7 @@ void handleErrorLogin({
   } else if (error is UnAuthorizedException) {
     DialogHelper.showErrorDialog(
       context: context,
-      description: 'Usuário e/ou Senha incorreto(s)!',
+      description: 'E-mail e/ou Senha incorreto(s)!',
     );
   } else if (error is ForbiddenRequestException) {
     final String? message = error.message;

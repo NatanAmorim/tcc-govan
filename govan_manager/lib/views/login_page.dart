@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:govan/controllers/login_controller.dart';
+import 'package:govan/views/meus_servicos_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,24 +11,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final LoginController controller = LoginController();
+
   @override
   void initState() {
     super.initState();
-    usernameController = TextEditingController();
-    passwordController = TextEditingController();
+    controller.emailController = TextEditingController();
+    controller.senhaController = TextEditingController();
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
+    controller.emailController.dispose();
+    controller.senhaController.dispose();
     super.dispose();
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  late TextEditingController usernameController, passwordController;
 
   bool _isObscurePassword = true;
   bool _loggingIn = false;
@@ -49,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(24.0),
                   child: Form(
                     key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: AutovalidateMode.disabled,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: 15.0,
                         ),
-                        _buildPasswordTextField(),
+                        _buildPasswordTextField(context: context),
                         SizedBox(
                           height: 15.0,
                         ),
@@ -88,10 +90,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUserTextField() {
     return TextFormField(
-      controller: usernameController,
+      controller: controller.emailController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Digite seu nome de usuário';
+          return 'Digite seu E-mail';
         }
         return null;
       },
@@ -105,8 +107,7 @@ class _LoginPageState extends State<LoginPage> {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        hintText: "Usuário",
-        labelText: "Usuário",
+        labelText: "E-mail",
         prefixIcon: Icon(
           Icons.person,
         ),
@@ -114,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildPasswordTextField() {
+  Widget _buildPasswordTextField({required BuildContext context}) {
     return TextFormField(
-      controller: passwordController,
+      controller: controller.senhaController,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Digite a sua senha';
@@ -127,14 +128,13 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: GoogleFonts.roboto(),
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => login(),
+      onFieldSubmitted: (_) => login(context),
       obscureText: _isObscurePassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        hintText: "Digite sua Senha",
-        labelText: "Digite sua Senha",
+        labelText: "Senha",
         hintStyle: GoogleFonts.roboto(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(50.0),
           )),
         ),
-        onPressed: _loggingIn ? null : () => login(),
+        onPressed: controller.isLoggingIn ? null : () => login(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: _loggingIn
@@ -207,42 +207,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  login() async {
+  login(BuildContext context) async {
     setState(() {
-      _loggingIn = !_loggingIn;
+      controller.isLoggingIn = !controller.isLoggingIn;
     });
     try {
-      bool isLoggedIn = await auth();
+      final bool isLoggedIn = await controller.login(context: context);
 
-      // if (isLoggedIn) {
-      //   Get.off(() => PacScreen());
-      // }
+      if (isLoggedIn) {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const MeusServicosPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
     } finally {
       setState(() {
-        _loggingIn = !_loggingIn;
+        controller.isLoggingIn = !controller.isLoggingIn;
       });
-    }
-  }
-
-  Future<bool> auth() async {
-    final isValid = formKey.currentState!.validate();
-
-    if (!isValid) {
-      return false;
-    }
-
-    var request = <String, String>{
-      'usuario_username': usernameController.text,
-      'usuario_senha': passwordController.text,
-    };
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (usernameController.text == 'admin' &&
-        passwordController.text == 'admin') {
-      return true;
-    } else {
-      return false;
     }
   }
 }

@@ -8,19 +8,19 @@ String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 class LoginModel {
   LoginModel({
     required this.email,
-    required this.senhaHash,
+    required this.senha,
   });
 
   String email;
-  String senhaHash;
+  String senha;
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
         email: json["email"],
-        senhaHash: json["senhaHash"],
+        senha: json["senha"],
       );
 
   Map<String, dynamic> toJson() => {
         "email": email,
-        "senhaHash": senhaHash,
+        "senha": senha,
       };
 }

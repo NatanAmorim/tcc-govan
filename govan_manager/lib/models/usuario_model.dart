@@ -9,6 +9,27 @@ UsuarioModel usuarioModelFromJson(String str) =>
 
 String usuarioModelToJson(UsuarioModel data) => json.encode(data.toJson());
 
+class UsuariosModel {
+  UsuariosModel({
+    required this.usuarios,
+  });
+
+  List<UsuarioModel>? usuarios;
+
+  factory UsuariosModel.fromJson(Map<String, dynamic> json) => UsuariosModel(
+        usuarios: json["usuarios"] == null
+            ? null
+            : List<UsuarioModel>.from(
+                json["usuarios"].map((x) => UsuarioModel.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "usuarios": usuarios == null
+            ? null
+            : List<dynamic>.from(usuarios!.map((x) => x.toJson())),
+      };
+}
+
 class UsuarioModel {
   UsuarioModel({
     required this.pessoa,
