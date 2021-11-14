@@ -39,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         key: controller.scaffoldKey,
         appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('goVan - Manager'),
         ),
         body: Container(

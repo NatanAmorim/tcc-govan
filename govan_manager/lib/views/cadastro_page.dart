@@ -54,6 +54,7 @@ class _CadastroPageState extends State<CadastroPage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('Cadastro de Motorista'),
         ),
         key: controller.scaffoldKey,

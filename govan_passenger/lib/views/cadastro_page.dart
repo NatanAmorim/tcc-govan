@@ -52,7 +52,7 @@ class _CadastroPageState extends State<CadastroPage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text('Cadastro de Motorista'),
+          title: Text('Cadastro de Passageiro'),
         ),
         key: controller.scaffoldKey,
         body: SingleChildScrollView(

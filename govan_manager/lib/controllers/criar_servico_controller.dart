@@ -48,7 +48,8 @@ class CriarServicoController {
       ),
       contrato: Contrato(
         descricao: formularioServico.contrato.descricao.text,
-        urlPdf: formularioServico.contrato.urlPdf,
+        // urlPdf: formularioServico.contrato.urlPdf,
+        urlPdf: 'formularioServico.contrato.urlPdf',
         politicaCancelamento: PoliticaCancelamento(
           isRequerido:
               formularioServico.contrato.politicaCancelamento.isRequerido,
@@ -60,7 +61,7 @@ class CriarServicoController {
 
     var response = await ApiHelper()
         .post(
-      api: '/api/timeline',
+      api: '/servico',
       payloadObject: request,
       token: box.get('token'),
     )
