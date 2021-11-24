@@ -14,7 +14,7 @@ class ServicoController {
 
     var response = await ApiHelper()
         .get(
-      api: '/servico/',
+      api: '/servico/motorista/',
       token: box.get('token'),
     )
         .catchError((dynamic error, dynamic stack) {

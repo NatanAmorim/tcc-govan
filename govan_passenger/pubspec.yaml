@@ -15,6 +15,8 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   path_provider: ^2.0.1
+  flutter_masked_text2: ^0.9.1
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:

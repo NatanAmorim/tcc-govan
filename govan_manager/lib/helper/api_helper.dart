@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 
 class ApiHelper {
   static const int TIME_OUT_DURATION = 5;
-  final String _baseUrl = 'http://10.0.2.2:1337/api';
+  // final String _baseUrl = 'http://10.0.2.2:1337/api';
+  final String _baseUrl = 'http://192.168.15.4:1337/api';
 
   Future<dynamic> get({
     required String api,

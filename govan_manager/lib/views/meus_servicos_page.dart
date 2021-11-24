@@ -19,20 +19,21 @@ class MeusServicosPage extends StatelessWidget {
           title: Text('Meus Servços'),
           actions: [
             IconButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ConfiguracoesPage()),
+              ),
+              icon: Icon(
+                Icons.settings,
+              ),
+            ),
+            IconButton(
               icon: const Icon(
                 Icons.logout,
               ),
               onPressed: () => DialogHelper.showLogoutDialog(context: context),
             ),
-            IconButton(
-                onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ConfiguracoesPage()),
-                    ),
-                icon: Icon(
-                  Icons.settings,
-                )),
           ],
         ),
         body: FutureBuilder<ServicosModel>(
@@ -61,7 +62,22 @@ class MeusServicosPage extends StatelessWidget {
                           child: Card(
                             child: Column(
                               children: [
-                                Text(servico.titulo),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      servico.titulo,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:govan/controllers/criar_servico_controller.dart';
 import 'package:govan/models/formulario_servico_model.dart';
 import 'package:govan/widgets/integer_field.dart';
@@ -42,7 +43,8 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
         descricao: TextEditingController(),
         pontoInicio: TextEditingController(),
         pontoFim: TextEditingController(),
-        valorCobrado: TextEditingController(),
+        valorCobrado: MoneyMaskedTextController(
+            decimalSeparator: '.', thousandSeparator: ',', leftSymbol: 'R\$'),
         faculdades: <FormularioServicoTrajetoFaculdadeModel>[
           FormularioServicoTrajetoFaculdadeModel(
             nome: TextEditingController(),
@@ -118,7 +120,7 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                   ElevatedButton.icon(
                     onPressed: () {},
                     icon: Icon(Icons.upload),
-                    label: Text('Enviar PDF do Contrato'),
+                    label: Text('Enviar PDF Contrato'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFieldWidget(
@@ -231,7 +233,18 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                   ),
                   const SizedBox(height: 10.0),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        controller.formularioServico.veiculos.add(
+                          FormularioServicoVeiculoModel(
+                            nome: TextEditingController(),
+                            cor: TextEditingController(),
+                            placa: TextEditingController(),
+                            urlFoto: TextEditingController(),
+                          ),
+                        );
+                      });
+                    },
                     icon: Icon(Icons.add),
                   ),
                   const SizedBox(height: 10.0),
@@ -277,7 +290,7 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                     },
                   ),
                   const SizedBox(height: 10.0),
-                  TextFieldWidget(
+                  IntegerFieldWidget(
                     fieldName: "Valor Cobrado", //FIX colocar teclado númerico
                     controller:
                         controller.formularioServico.trajeto.valorCobrado,
@@ -290,6 +303,7 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 10.0),
                   Text('Faculdades'),
                   ...controller.formularioServico.trajeto.faculdades.map(
                     (FormularioServicoTrajetoFaculdadeModel faculdade) =>
@@ -327,7 +341,16 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                   ),
                   const SizedBox(height: 10.0),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        controller.formularioServico.trajeto.faculdades.add(
+                          FormularioServicoTrajetoFaculdadeModel(
+                            nome: TextEditingController(),
+                            horarioChegada: TextEditingController(),
+                          ),
+                        );
+                      });
+                    },
                     icon: Icon(Icons.add),
                   ),
                 ],

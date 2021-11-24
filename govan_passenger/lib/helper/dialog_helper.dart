@@ -13,17 +13,7 @@ class DialogHelper {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
-            Text('Tudo Certo!'),
-            Icon(
-              Icons.check,
-              color: Colors.green,
-              size: 48,
-            ),
-          ],
-        ),
+        title: Text('Tudo Certo!'),
         content: Text(description),
         actions: <Widget>[
           TextButton(
@@ -85,17 +75,7 @@ class DialogHelper {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(title),
-            Icon(
-              Icons.error,
-              color: Theme.of(context).colorScheme.error,
-              size: 48,
-            ),
-          ],
-        ),
+        title: Text(title),
         content: Text(description),
         actions: <Widget>[
           TextButton(
@@ -113,17 +93,7 @@ class DialogHelper {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            const Text('Sair'),
-            Icon(
-              Icons.logout,
-              color: Theme.of(context).colorScheme.error,
-              size: 48,
-            ),
-          ],
-        ),
+        title: const Text('Sair'),
         content: const Text('Tem certeza?'),
         actions: <Widget>[
           TextButton(
@@ -158,18 +128,8 @@ class DialogHelper {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            const Text(
-              'Impossível confirmar a identidade',
-            ),
-            Icon(
-              Icons.person_off_outlined,
-              color: Theme.of(context).colorScheme.error,
-              size: 48,
-            ),
-          ],
+        title: const Text(
+          'Impossível confirmar a identidade',
         ),
         content: const Text(
           'A sua autenticação expírou, para continuar usando, '

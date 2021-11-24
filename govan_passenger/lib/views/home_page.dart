@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:govan/helper/dialog_helper.dart';
+import 'package:govan/views/chat_page.dart';
+import 'package:govan/views/configuracoes_page.dart';
+import 'package:govan/views/explorar_servicos_page.dart';
+import 'package:govan/views/minhas_vans_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +20,28 @@ class _HomePageState extends State<HomePage> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
             title: const Text('GoVan'),
+            actions: [
+              IconButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ConfiguracoesPage(),
+                  ),
+                ),
+                icon: Icon(
+                  Icons.settings,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                ),
+                onPressed: () =>
+                    DialogHelper.showLogoutDialog(context: context),
+              ),
+            ],
             bottom: const TabBar(
               tabs: <Tab>[
                 Tab(
@@ -33,11 +59,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              ExplorarServicosPage(),
+              MinhasVansPage(),
+              ChatPage(username: 'username'),
             ],
           ),
         ),

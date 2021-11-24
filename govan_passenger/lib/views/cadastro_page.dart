@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govan/controllers/cadastro_controller.dart';
 import 'package:govan/views/login_page.dart';
@@ -19,15 +20,15 @@ class _CadastroPageState extends State<CadastroPage> {
     super.initState();
     controller.emailController = TextEditingController();
     controller.passwordController = TextEditingController();
-    controller.cepController = TextEditingController();
+    controller.cepController = MaskedTextController(mask: '00000-000');
     controller.bairroController = TextEditingController();
     controller.cidadeController = TextEditingController();
     controller.logadouroController = TextEditingController();
     controller.numeroController = TextEditingController();
     controller.complementoController = TextEditingController();
     controller.nomeController = TextEditingController();
-    controller.rgController = TextEditingController();
-    controller.cpfController = TextEditingController();
+    controller.rgController = MaskedTextController(mask: '00-000-000-0');
+    controller.cpfController = MaskedTextController(mask: '000-000-000-00');
   }
 
   @override
@@ -52,7 +53,8 @@ class _CadastroPageState extends State<CadastroPage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text('Cadastro de Passageiro'),
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text('Cadastro de Motorista'),
         ),
         key: controller.scaffoldKey,
         body: SingleChildScrollView(
@@ -167,7 +169,8 @@ class _CadastroPageState extends State<CadastroPage> {
                           ),
                         ),
                         const SizedBox(height: 10.0),
-                        TextFormField(
+                        IntegerFieldWidget(
+                          fieldName: 'RG*',
                           controller: controller.rgController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -175,17 +178,10 @@ class _CadastroPageState extends State<CadastroPage> {
                             }
                             return null;
                           },
-                          style: GoogleFonts.roboto(),
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            labelText: "RG*",
-                          ),
                         ),
                         const SizedBox(height: 10.0),
-                        TextFormField(
+                        IntegerFieldWidget(
+                          fieldName: "CPF*",
                           controller: controller.cpfController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -193,14 +189,6 @@ class _CadastroPageState extends State<CadastroPage> {
                             }
                             return null;
                           },
-                          style: GoogleFonts.roboto(),
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            labelText: "CPF*",
-                          ),
                         ),
                         const SizedBox(height: 10.0),
                         Text(
@@ -208,7 +196,8 @@ class _CadastroPageState extends State<CadastroPage> {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         const SizedBox(height: 10.0),
-                        TextFormField(
+                        IntegerFieldWidget(
+                          fieldName: 'CEP*',
                           controller: controller.cepController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -216,14 +205,6 @@ class _CadastroPageState extends State<CadastroPage> {
                             }
                             return null;
                           },
-                          style: GoogleFonts.roboto(),
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            labelText: "CEP*",
-                          ),
                         ),
                         const SizedBox(height: 10.0),
                         TextFormField(

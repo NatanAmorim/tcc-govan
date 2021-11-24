@@ -222,7 +222,7 @@ class Trajeto {
   String descricao;
   String pontoInicio;
   String pontoFim;
-  int valorCobrado;
+  String valorCobrado;
   List<Faculdade> faculdades;
 
   factory Trajeto.fromJson(Map<String, dynamic> json) => Trajeto(

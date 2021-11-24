@@ -38,7 +38,7 @@ class CriarServicoController {
         descricao: formularioServico.trajeto.descricao.text,
         pontoInicio: formularioServico.trajeto.pontoInicio.text,
         pontoFim: formularioServico.trajeto.pontoFim.text,
-        valorCobrado: int.parse(formularioServico.trajeto.valorCobrado.text),
+        valorCobrado: formularioServico.trajeto.valorCobrado.text,
         faculdades: formularioServico.trajeto.faculdades
             .map((FormularioServicoTrajetoFaculdadeModel faculdade) =>
                 Faculdade(
@@ -53,8 +53,11 @@ class CriarServicoController {
         politicaCancelamento: PoliticaCancelamento(
           isRequerido:
               formularioServico.contrato.politicaCancelamento.isRequerido,
-          mesesMinimo: int.parse(
-              formularioServico.contrato.politicaCancelamento.mesesMinimo.text),
+          mesesMinimo: formularioServico
+                  .contrato.politicaCancelamento.mesesMinimo.text.isNotEmpty
+              ? int.parse(formularioServico
+                  .contrato.politicaCancelamento.mesesMinimo.text)
+              : 0,
         ),
       ),
     );

@@ -39,14 +39,16 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         key: controller.scaffoldKey,
         appBar: AppBar(
-          title: Text('goVan - Manager'),
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text('goVan - Passagueiro'),
         ),
-        body: Container(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
+            reverse: true,
             child: Card(
               child: Container(
-                height: 390,
-                width: 350,
+                height: 361,
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Form(
