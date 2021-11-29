@@ -54,6 +54,12 @@ handleError({
     DialogHelper.showTokenExpiredDialog(
       context: context,
     );
+  } else if (error is ErroContratarServico) {
+    DialogHelper.showErrorDialog(
+      title: 'Erro ao Contratar serviço',
+      description: 'Esse serviço Não tem Vagas abertas',
+      context: context,
+    );
   } else {
     DialogHelper.showTokenExpiredDialog(
       context: context,

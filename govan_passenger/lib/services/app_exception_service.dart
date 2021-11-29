@@ -49,3 +49,9 @@ class InternalServerErrorException extends AppException {
     required String message,
   }) : super(message, 'Erro do servidor');
 }
+
+class ErroContratarServico extends AppException {
+  ErroContratarServico({
+    required String message,
+  }) : super(message, 'Erro do servidor');
+}

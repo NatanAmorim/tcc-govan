@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:govan/controllers/detalhes_servico_controller.dart';
+import 'package:govan/controllers/explorar_servicos_detalhes_controller.dart';
+import 'package:govan/helper/dialog_helper.dart';
 import 'package:govan/models/servico_model.dart';
 import 'package:hive/hive.dart';
 
-class DetalhesServicoPage extends StatefulWidget {
-  DetalhesServicoPage({
+class ExplorarServicoDetalhesPage extends StatefulWidget {
+  ExplorarServicoDetalhesPage({
     Key? key,
     required this.servico,
   }) : super(key: key);
@@ -12,11 +13,14 @@ class DetalhesServicoPage extends StatefulWidget {
   final ServicoModel servico;
 
   @override
-  State<DetalhesServicoPage> createState() => _DetalhesServicoPageState();
+  State<ExplorarServicoDetalhesPage> createState() =>
+      _ExplorarServicoDetalhesPageState();
 }
 
-class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
-  final DetalhesServicosController controller = DetalhesServicosController();
+class _ExplorarServicoDetalhesPageState
+    extends State<ExplorarServicoDetalhesPage> {
+  final ExplorarServicosDetalhesController controller =
+      ExplorarServicosDetalhesController();
 
   final Box<dynamic> box = Hive.box('jwt');
 
@@ -249,6 +253,41 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                   ),
                 ),
                 SizedBox(height: 10),
+                Visibility(
+                  visible: widget.servico.passageiros != null
+                      ? !widget.servico.passageiros!.any(
+                          (Passageiro passageiro) =>
+                              passageiro.pessoaId == box.get('user_id'),
+                        )
+                      : true,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      primary: Theme.of(context).accentColor,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                      textStyle:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      bool response = await controller.contratarVan(
+                        context: context,
+                        servicoId: widget.servico.id,
+                      );
+
+                      if (response == true) {
+                        DialogHelper.showSucessDialog(
+                          context: context,
+                          description: 'Van Contratada com Sucesso!',
+                        );
+                      }
+                    },
+                    icon: Icon(Icons.connect_without_contact),
+                    label: Text('Contratar'),
+                  ),
+                ),
               ],
             ),
           ),

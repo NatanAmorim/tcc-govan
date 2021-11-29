@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:govan/controllers/servico_controller.dart';
 import 'package:govan/helper/dialog_helper.dart';
 import 'package:govan/models/servico_model.dart';
-import 'package:govan/views/configuracoes_page.dart';
 import 'package:govan/views/criar_servico_page.dart';
-import 'package:govan/views/detalhes_servico_page.dart';
+import 'package:govan/views/mais_opcoes_servico_page.dart';
 
 class MeusServicosPage extends StatelessWidget {
   const MeusServicosPage({Key? key}) : super(key: key);
@@ -16,18 +15,8 @@ class MeusServicosPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: Text('Meus Servços'),
+          title: Text('Meus Serviços'),
           actions: [
-            IconButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ConfiguracoesPage()),
-              ),
-              icon: Icon(
-                Icons.settings,
-              ),
-            ),
             IconButton(
               icon: const Icon(
                 Icons.logout,
@@ -53,9 +42,10 @@ class MeusServicosPage extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DetalhesServicoPage(
-                                    servico: servico,
-                                  )),
+                            builder: (context) => MaisOpcoesServicoPage(
+                              servico: servico,
+                            ),
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

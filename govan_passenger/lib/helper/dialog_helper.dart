@@ -17,12 +17,8 @@ class DialogHelper {
         content: Text(description),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancelar'),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
             onPressed: () {
-              Navigator.pop(context, 'Confirmar');
+              Navigator.pop(context, 'OK');
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -31,7 +27,7 @@ class DialogHelper {
                 (Route<dynamic> route) => false,
               );
             },
-            child: const Text('Confirmar'),
+            child: const Text('OK'),
           ),
         ],
       ),

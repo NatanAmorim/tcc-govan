@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUserTextField() {
     return TextFormField(
+      autofocus: true,
       controller: controller.emailController,
       validator: (value) {
         if (value == null || value.isEmpty) {

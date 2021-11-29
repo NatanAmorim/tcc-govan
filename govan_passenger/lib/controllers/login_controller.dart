@@ -49,11 +49,16 @@ class LoginController {
       // LOGIN SUCESS, now get the response
       final Map<String, dynamic> responseJson = json.decode(response);
       // Store JWT token on HiveDB
-      final Box<dynamic> loggedUserBox = Hive.box('jwt');
+      final Box<dynamic> jwtBox = Hive.box('jwt');
 
-      await loggedUserBox.put(
+      await jwtBox.put(
         'token',
         responseJson['token'],
+      );
+
+      await jwtBox.put(
+        'user_id',
+        responseJson['id'],
       );
 
       return true;

@@ -28,6 +28,7 @@ class ServicosModel {
 
 class ServicoModel {
   ServicoModel({
+    this.id,
     required this.titulo,
     required this.descricao,
     required this.vagasDisponiveis,
@@ -37,6 +38,7 @@ class ServicoModel {
     this.passageiros,
   });
 
+  String? id;
   String titulo;
   String descricao;
   int vagasDisponiveis;
@@ -46,6 +48,7 @@ class ServicoModel {
   List<Passageiro>? passageiros;
 
   factory ServicoModel.fromJson(Map<String, dynamic> json) => ServicoModel(
+        id: json["_id"] == null ? null : json["_id"],
         titulo: json["titulo"] == null ? null : json["titulo"],
         descricao: json["descricao"] == null ? null : json["descricao"],
         vagasDisponiveis: json["vagas_disponiveis"] == null
@@ -62,6 +65,7 @@ class ServicoModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id == null ? null : id,
         "titulo": titulo == null ? null : titulo,
         "descricao": descricao == null ? null : descricao,
         "vagas_disponiveis": vagasDisponiveis == null ? null : vagasDisponiveis,
@@ -163,25 +167,33 @@ class Passageiro {
 
 class Mensalidade {
   Mensalidade({
-    required this.dataPagamento,
-    required this.pagamento,
+    this.dataVencimento,
+    this.valor,
+    this.isPago,
+    this.formaPagamento,
   });
 
-  String dataPagamento;
-  List<Pagamento> pagamento;
+  DateTime? dataVencimento;
+  double? valor;
+  bool? isPago;
+  String? formaPagamento;
 
   factory Mensalidade.fromJson(Map<String, dynamic> json) => Mensalidade(
-        dataPagamento:
-            json["data_pagamento"] == null ? null : json["data_pagamento"],
-        pagamento: List<Pagamento>.from(
-            json["pagamento"].map((x) => Pagamento.fromJson(x))),
+        dataVencimento: json["data_vencimento"] == null
+            ? null
+            : DateTime.parse(json["data_vencimento"]),
+        valor: json["valor"] == null ? null : json["valor"].toDouble(),
+        isPago: json["is_pago"] == null ? null : json["is_pago"],
+        formaPagamento:
+            json["forma_pagamento"] == null ? null : json["forma_pagamento"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data_pagamento": dataPagamento == null ? null : dataPagamento,
-        "pagamento": pagamento == null
-            ? null
-            : List<dynamic>.from(pagamento.map((x) => x.toJson())),
+        "data_vencimento":
+            dataVencimento == null ? null : dataVencimento!.toIso8601String(),
+        "valor": valor == null ? null : valor,
+        "is_pago": isPago == null ? null : isPago,
+        "forma_pagamento": formaPagamento == null ? null : formaPagamento,
       };
 }
 

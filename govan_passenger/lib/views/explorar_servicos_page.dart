@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:govan/controllers/servico_controller.dart';
 import 'package:govan/models/servico_model.dart';
-import 'package:govan/views/explorar_servicos_detalhes.dart';
+import 'package:govan/views/explorar_servicos_detalhes_page.dart';
 
 class ExplorarServicosPage extends StatefulWidget {
   ExplorarServicosPage({Key? key}) : super(key: key);
@@ -16,7 +16,9 @@ class _ExplorarServicosPageState extends State<ExplorarServicosPage> {
 
   final ServicoController controller = ServicoController();
 
-  void clearSearchText() => searchTextEditingController.clear();
+  void clearSearchText() => setState(() {
+        searchTextEditingController.clear();
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,6 @@ class _ExplorarServicosPageState extends State<ExplorarServicosPage> {
           } else {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -139,6 +140,7 @@ class _ExplorarServicosPageState extends State<ExplorarServicosPage> {
                     horizontal: MediaQuery.of(context).size.width / 6,
                   ),
                   child: TextField(
+                    autofocus: true,
                     controller: searchTextEditingController,
                     decoration: InputDecoration(
                       hintStyle: const TextStyle(

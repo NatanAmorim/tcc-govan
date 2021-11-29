@@ -66,3 +66,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# HERE SDK for Flutter
+govan_manager/plugins/here_sdk/*

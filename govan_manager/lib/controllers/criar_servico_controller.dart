@@ -92,4 +92,10 @@ class CriarServicoController {
       return true;
     }
   }
+
+  Future<bool> editar({
+    required BuildContext context,
+  }) async {
+    return false;
+  }
 }

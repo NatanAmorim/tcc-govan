@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:govan/controllers/servico_controller.dart';
 import 'package:govan/models/servico_model.dart';
-import 'package:govan/views/explorar_servicos_detalhes.dart';
+import 'package:govan/views/minhas_vans_detalhes_page.dart';
 
 class MinhasVansPage extends StatefulWidget {
   const MinhasVansPage({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _MinhasVansPageState extends State<MinhasVansPage> {
                       context,
                       MaterialPageRoute(
                           //TODO: mudar para meus serviçosDetalhe
-                          builder: (context) => ExplorarServicoDetalhesPage(
+                          builder: (context) => MinhasVansDetalhesPage(
                                 servico: servico,
                               )),
                     ),

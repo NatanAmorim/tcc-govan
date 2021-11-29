@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:govan/controllers/criar_servico_controller.dart';
 import 'package:govan/models/formulario_servico_model.dart';
+import 'package:govan/models/servico_model.dart';
 import 'package:govan/widgets/integer_field.dart';
 import 'package:govan/widgets/text_field.dart';
 
 class CriarServicoPage extends StatefulWidget {
-  const CriarServicoPage({Key? key}) : super(key: key);
+  const CriarServicoPage({
+    Key? key,
+    this.servico,
+  }) : super(key: key);
+
+  final ServicoModel? servico;
 
   @override
   _CriarServicoPageState createState() => _CriarServicoPageState();
@@ -18,41 +24,113 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
   @override
   void initState() {
     super.initState();
-    controller.formularioServico = FormularioServicoModel(
-      titulo: TextEditingController(),
-      descricao: TextEditingController(),
-      vagasDisponiveis: TextEditingController(),
-      veiculos: <FormularioServicoVeiculoModel>[
-        FormularioServicoVeiculoModel(
-          nome: TextEditingController(),
-          cor: TextEditingController(),
-          placa: TextEditingController(),
-          urlFoto: TextEditingController(),
+    if (widget.servico != null) {
+      controller.formularioServico = FormularioServicoModel(
+        titulo: TextEditingController(
+          text: widget.servico!.titulo,
         ),
-      ],
-      contrato: FormularioServicoContratoModel(
-        descricao: TextEditingController(),
-        politicaCancelamento:
-            FormularioServicoContratoPoliticaCancelamentoModel(
-          isRequerido: false,
-          mesesMinimo: TextEditingController(),
+        descricao: TextEditingController(
+          text: widget.servico!.descricao,
         ),
-        urlPdf: '', //fix
-      ),
-      trajeto: FormularioServicoTrajetoModel(
+        vagasDisponiveis: TextEditingController(
+          text: widget.servico!.vagasDisponiveis.toString(),
+        ),
+        veiculos: widget.servico!.veiculos
+            .map(
+              (Veiculo veiculo) => FormularioServicoVeiculoModel(
+                nome: TextEditingController(
+                  text: veiculo.nome,
+                ),
+                cor: TextEditingController(
+                  text: veiculo.cor,
+                ),
+                placa: TextEditingController(
+                  text: veiculo.placa,
+                ),
+                urlFoto: TextEditingController(
+                  text: veiculo.urlFoto,
+                ),
+              ),
+            )
+            .toList(),
+        contrato: FormularioServicoContratoModel(
+          descricao: TextEditingController(),
+          politicaCancelamento:
+              FormularioServicoContratoPoliticaCancelamentoModel(
+            isRequerido: false,
+            mesesMinimo: TextEditingController(),
+          ),
+          urlPdf: '', //fix
+        ),
+        trajeto: FormularioServicoTrajetoModel(
+          descricao: TextEditingController(
+            text: widget.servico!.trajeto.descricao,
+          ),
+          pontoInicio: TextEditingController(
+            text: widget.servico!.trajeto.pontoInicio,
+          ),
+          pontoFim: TextEditingController(
+            text: widget.servico!.trajeto.pontoFim,
+          ),
+          valorCobrado: MoneyMaskedTextController(
+            initialValue: double.parse(
+              widget.servico!.trajeto.valorCobrado.replaceAll(r'R$ ', ''),
+            ),
+            decimalSeparator: '.',
+            thousandSeparator: ',',
+            leftSymbol: r'R$ ',
+          ),
+          faculdades: widget.servico!.trajeto.faculdades
+              .map(
+                (Faculdade faculdade) => FormularioServicoTrajetoFaculdadeModel(
+                  nome: TextEditingController(
+                    text: faculdade.nome,
+                  ),
+                  horarioChegada: TextEditingController(
+                    text: faculdade.horarioChegada,
+                  ),
+                ),
+              )
+              .toList(),
+        ),
+      );
+    } else {
+      controller.formularioServico = FormularioServicoModel(
+        titulo: TextEditingController(),
         descricao: TextEditingController(),
-        pontoInicio: TextEditingController(),
-        pontoFim: TextEditingController(),
-        valorCobrado: MoneyMaskedTextController(
-            decimalSeparator: '.', thousandSeparator: ',', leftSymbol: 'R\$'),
-        faculdades: <FormularioServicoTrajetoFaculdadeModel>[
-          FormularioServicoTrajetoFaculdadeModel(
+        vagasDisponiveis: TextEditingController(),
+        veiculos: <FormularioServicoVeiculoModel>[
+          FormularioServicoVeiculoModel(
             nome: TextEditingController(),
-            horarioChegada: TextEditingController(),
-          )
+            cor: TextEditingController(),
+            placa: TextEditingController(),
+            urlFoto: TextEditingController(),
+          ),
         ],
-      ),
-    );
+        contrato: FormularioServicoContratoModel(
+          descricao: TextEditingController(),
+          politicaCancelamento:
+              FormularioServicoContratoPoliticaCancelamentoModel(
+            isRequerido: false,
+            mesesMinimo: TextEditingController(),
+          ),
+          urlPdf: '', //fix
+        ),
+        trajeto: FormularioServicoTrajetoModel(
+          descricao: TextEditingController(),
+          pontoInicio: TextEditingController(),
+          pontoFim: TextEditingController(),
+          valorCobrado: MoneyMaskedTextController(
+              decimalSeparator: '.', thousandSeparator: ',', leftSymbol: 'R\$'),
+          faculdades: <FormularioServicoTrajetoFaculdadeModel>[
+            FormularioServicoTrajetoFaculdadeModel(
+              nome: TextEditingController(),
+              horarioChegada: TextEditingController(),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -359,17 +437,28 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(
-            Icons.send,
+          child: Icon(
+            widget.servico == null ? Icons.send : Icons.save,
           ),
           onPressed: () async {
-            final bool response = await controller.postar(
-              context: context,
-            );
-            if (response == true) {
-              Navigator.pop(
-                context,
+            if (widget.servico == null) {
+              final bool response = await controller.postar(
+                context: context,
               );
+              if (response == true) {
+                Navigator.pop(
+                  context,
+                );
+              }
+            } else {
+              final bool response = await controller.editar(
+                context: context,
+              );
+              if (response == true) {
+                Navigator.pop(
+                  context,
+                );
+              }
             }
           },
         ),
