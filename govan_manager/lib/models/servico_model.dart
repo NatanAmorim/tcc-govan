@@ -130,18 +130,21 @@ class PoliticaCancelamento {
 class Passageiro {
   Passageiro({
     required this.pessoaId,
+    this.pessoaNome,
     required this.dataInicioContrato,
     required this.dataFimContrato,
     this.mensalidade,
   });
 
   String pessoaId;
+  String? pessoaNome;
   String dataInicioContrato;
   String dataFimContrato;
   List<Mensalidade>? mensalidade;
 
   factory Passageiro.fromJson(Map<String, dynamic> json) => Passageiro(
         pessoaId: json["pessoa_id"] == null ? null : json["pessoa_id"],
+        pessoaNome: json["pessoa_nome"] == null ? null : json["pessoa_nome"],
         dataInicioContrato: json["data_inicio_contrato"] == null
             ? null
             : json["data_inicio_contrato"],
@@ -156,6 +159,7 @@ class Passageiro {
 
   Map<String, dynamic> toJson() => {
         "pessoa_id": pessoaId == null ? null : pessoaId,
+        "pessoa_nome": pessoaNome == null ? null : pessoaNome,
         "data_inicio_contrato":
             dataInicioContrato == null ? null : dataInicioContrato,
         "data_fim_contrato": dataFimContrato == null ? null : dataFimContrato,

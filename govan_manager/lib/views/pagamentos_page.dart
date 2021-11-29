@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:govan/controllers/pagamentos_controller.dart';
 import 'package:govan/helper/dialog_helper.dart';
 import 'package:govan/models/servico_model.dart';
+import 'package:govan/views/meus_servicos_page.dart';
 import 'package:intl/intl.dart';
 
 class PagamentosPage extends StatefulWidget {
-  const PagamentosPage({
+  PagamentosPage({
     Key? key,
-    required this.passageiros,
+    required this.servico,
   }) : super(key: key);
 
-  final List<Passageiro> passageiros;
+  final ServicoModel servico;
 
   @override
   _PagamentosPageState createState() => _PagamentosPageState();
@@ -17,6 +19,7 @@ class PagamentosPage extends StatefulWidget {
 
 class _PagamentosPageState extends State<PagamentosPage> {
   final DateFormat format = DateFormat('dd/MM/yyyy');
+  final PagamentosController controller = PagamentosController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,60 +41,159 @@ class _PagamentosPageState extends State<PagamentosPage> {
           child: Column(
             children: <Widget>[
               const SizedBox(height: 10),
-              for (Passageiro item in widget.passageiros)
-                // Card(
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Column(
-                //       children: <Widget>[
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           crossAxisAlignment: CrossAxisAlignment.center,
-                //           children: [
-                //             Icon(
-                //               item.isPago! ? Icons.verified : Icons.error,
-                //               color: item.isPago! ? Colors.green : Colors.red,
-                //             ),
-                //             const SizedBox(width: 10),
-                //             Text(
-                //               item.isPago! ? 'Pago' : 'Em aberto',
-                //               style: Theme.of(context)
-                //                   .textTheme
-                //                   .headline6!
-                //                   .copyWith(
-                //                     color: item.isPago!
-                //                         ? Colors.green
-                //                         : Colors.red,
-                //                   ),
-                //             ),
-                //           ],
-                //         ),
-                //         const SizedBox(height: 10),
-                //         Text(
-                //           'Data de Vencimento: ${format.format(item.dataVencimento!)}',
-                //           style: Theme.of(context).textTheme.bodyText1,
-                //         ),
-                //         const SizedBox(height: 10),
-                //         Text(
-                //           'Valor: R\$ ${item.valor!}',
-                //           style: Theme.of(context).textTheme.headline6,
-                //         ),
-                //         Visibility(
-                //           visible: item.formaPagamento != null,
-                //           child: SizedBox(height: 10),
-                //         ),
-                //         Visibility(
-                //           visible: item.formaPagamento != null,
-                //           child: Text(
-                //             'Forma de Pagamento: ${item.formaPagamento ?? ''}',
-                //             style: Theme.of(context).textTheme.headline6,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                const SizedBox(height: 10),
+              for (Passageiro passageiro in widget.servico.passageiros!)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExpansionTile(
+                      expandedAlignment: Alignment.centerLeft,
+                      title: Text(passageiro.pessoaNome!),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              for (Mensalidade item in passageiro.mensalidade!)
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            item.isPago!
+                                                ? Icons.verified
+                                                : Icons.error,
+                                            color: item.isPago!
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            item.isPago! ? 'Pago' : 'Em aberto',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6!
+                                                .copyWith(
+                                                  color: item.isPago!
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        'Data de Vencimento: ${format.format(item.dataVencimento!)}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        'Valor: R\$ ${item.valor!}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                      Visibility(
+                                        visible: !item.isPago!,
+                                        child: SizedBox(height: 10),
+                                      ),
+                                      Visibility(
+                                        visible: item.formaPagamento != null,
+                                        child: Text(
+                                          'Forma de Pagamento: ${item.formaPagamento ?? ''}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Visibility(
+                                        visible: !item.isPago!,
+                                        child: Center(
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50.0),
+                                              ),
+                                              primary: Colors.green[500],
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 15, vertical: 5),
+                                              textStyle: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () async {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  title: Text(
+                                                      'Qual a forma de Pagamento?'),
+                                                  content: TextField(),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(context,
+                                                              'Cancelar'),
+                                                      child: const Text(
+                                                          'Cancelar'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                          context,
+                                                          'OK',
+                                                        );
+                                                        Navigator
+                                                            .pushAndRemoveUntil(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                MeusServicosPage(),
+                                                          ),
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false,
+                                                        );
+                                                      },
+                                                      child: const Text(
+                                                          'Confirmar'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            icon: Icon(Icons.monetization_on),
+                                            label: Text('Marcar como Pago'),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Divider(
+                                        color: Theme.of(context).accentColor,
+                                        thickness: 2,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:govan/models/servico_model.dart';
 import 'package:govan/views/chat_page.dart';
+import 'package:govan/views/comparecimento_page.dart';
 import 'package:govan/views/criar_servico_page.dart';
 import 'package:govan/views/detalhes_servico_page.dart';
 import 'package:govan/views/pagamentos_page.dart';
@@ -11,7 +12,7 @@ class MaisOpcoesServicoPage extends StatelessWidget {
     required this.servico,
   }) : super(key: key);
 
-  ServicoModel servico;
+  final ServicoModel servico;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,50 @@ class MaisOpcoesServicoPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Card(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton.icon(
+                        icon: Icon(Icons.place_outlined),
+                        label: Text('Iniciar Rota'),
+                        onPressed: () {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => Renomear(
+                          //         servico: servico,
+                          //       ),
+                          //     ),
+                          //   );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton.icon(
+                        icon: Icon(Icons.fact_check_outlined),
+                        label: Text('Comparecimento'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ComparecimentoPage(
+                                passageiros: servico.passageiros!,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
                 Card(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -89,7 +134,7 @@ class MaisOpcoesServicoPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PagamentosPage(
-                                passageiros: servico.passageiros!,
+                                servico: servico,
                               ),
                             ),
                           );

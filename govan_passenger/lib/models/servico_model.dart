@@ -182,7 +182,7 @@ class Mensalidade {
         dataVencimento: json["data_vencimento"] == null
             ? null
             : DateTime.parse(json["data_vencimento"]),
-        valor: json["valor"] == null ? null : json["valor"],
+        valor: json["valor"] == null ? null : json["valor"].toString(),
         isPago: json["is_pago"] == null ? null : json["is_pago"],
         formaPagamento:
             json["forma_pagamento"] == null ? null : json["forma_pagamento"],
