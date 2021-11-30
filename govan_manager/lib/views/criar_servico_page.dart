@@ -54,11 +54,17 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
             )
             .toList(),
         contrato: FormularioServicoContratoModel(
-          descricao: TextEditingController(),
+          descricao: TextEditingController(
+            text: widget.servico!.contrato.descricao,
+          ),
           politicaCancelamento:
               FormularioServicoContratoPoliticaCancelamentoModel(
-            isRequerido: false,
-            mesesMinimo: TextEditingController(),
+            isRequerido:
+                widget.servico!.contrato.politicaCancelamento.isRequerido,
+            mesesMinimo: TextEditingController(
+              text: widget.servico!.contrato.politicaCancelamento.mesesMinimo
+                  .toString(),
+            ),
           ),
           urlPdf: '', //fix
         ),
@@ -452,6 +458,7 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
               }
             } else {
               final bool response = await controller.editar(
+                id: widget.servico!.id!,
                 context: context,
               );
               if (response == true) {

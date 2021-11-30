@@ -137,8 +137,29 @@ class _PagamentosPageState extends State<PagamentosPage> {
                                                     (BuildContext context) =>
                                                         AlertDialog(
                                                   title: Text(
-                                                      'Qual a forma de Pagamento?'),
-                                                  content: TextField(),
+                                                      'Digite a forma de Pagamento'),
+                                                  content: Form(
+                                                    key: controller.formKey,
+                                                    child: TextFormField(
+                                                      validator: (value) {
+                                                        if (value == null ||
+                                                            value.isEmpty) {
+                                                          return 'Digite a Forma de Pagamento';
+                                                        } else if (value
+                                                                .length <
+                                                            4) {
+                                                          return 'Mínimo 4 caracteres';
+                                                        }
+                                                        return null;
+                                                      },
+                                                      decoration:
+                                                          InputDecoration(
+                                                        labelText:
+                                                            "Forma de Pagamento",
+                                                      ),
+                                                      autofocus: true,
+                                                    ),
+                                                  ),
                                                   actions: <Widget>[
                                                     TextButton(
                                                       onPressed: () =>
@@ -148,7 +169,7 @@ class _PagamentosPageState extends State<PagamentosPage> {
                                                           'Cancelar'),
                                                     ),
                                                     TextButton(
-                                                      onPressed: () {
+                                                      onPressed: () async {
                                                         Navigator.pop(
                                                           context,
                                                           'OK',
@@ -166,12 +187,12 @@ class _PagamentosPageState extends State<PagamentosPage> {
                                                               false,
                                                         );
                                                       },
-                                                      child: const Text(
-                                                          'Confirmar'),
+                                                      child: const Text('OK'),
                                                     ),
                                                   ],
                                                 ),
                                               );
+                                              // TODO: marcar como pago
                                             },
                                             icon: Icon(Icons.monetization_on),
                                             label: Text('Marcar como Pago'),

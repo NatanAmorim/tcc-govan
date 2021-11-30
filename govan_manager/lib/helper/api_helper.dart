@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:govan/models/servico_model.dart';
 import 'package:govan/services/app_exception_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,6 +56,42 @@ class ApiHelper {
       final Object payload = json.encode(payloadObject);
 
       final http.Response response = await http.post(
+        uri,
+        body: payload,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(
+        const Duration(seconds: TIME_OUT_DURATION),
+      );
+
+      responseJson = _processResponse(response);
+    } on SocketException {
+      throw FetchDataException(
+        message: 'Não foi possível conectar',
+      );
+    } on TimeoutException {
+      throw ApiNotRespondingAppException(
+        message:
+            'Tempo esgotado, o servidor não respondeu dentro do tempo limite',
+      );
+    }
+    return responseJson;
+  }
+
+  Future<dynamic> patch({
+    required String api,
+    required dynamic payloadObject,
+    String? baseURL,
+    String? token,
+  }) async {
+    dynamic responseJson;
+    try {
+      final Uri uri = Uri.parse(baseURL ?? _baseUrl + api);
+      final Object payload = json.encode(payloadObject);
+
+      final http.Response response = await http.patch(
         uri,
         body: payload,
         headers: <String, String>{

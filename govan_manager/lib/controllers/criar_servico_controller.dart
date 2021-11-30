@@ -94,8 +94,87 @@ class CriarServicoController {
   }
 
   Future<bool> editar({
+    required String id,
     required BuildContext context,
   }) async {
-    return false;
+    final bool isValid = formKey.currentState!.validate();
+
+    if (!isValid) {
+      return false;
+    }
+
+    final Box<dynamic> box = Hive.box('jwt');
+
+    final Map<String, dynamic> request = ServicoModel(
+      titulo: formularioServico.titulo.text,
+      descricao: formularioServico.descricao.text,
+      vagasDisponiveis: int.parse(formularioServico.vagasDisponiveis.text),
+      veiculos: formularioServico.veiculos
+          .map((FormularioServicoVeiculoModel veiculo) => Veiculo(
+              placa: veiculo.placa.text,
+              nome: veiculo.nome.text,
+              cor: veiculo.cor.text))
+          .toList(),
+      trajeto: Trajeto(
+        descricao: formularioServico.trajeto.descricao.text,
+        pontoInicio: formularioServico.trajeto.pontoInicio.text,
+        pontoFim: formularioServico.trajeto.pontoFim.text,
+        valorCobrado: formularioServico.trajeto.valorCobrado.text,
+        faculdades: formularioServico.trajeto.faculdades
+            .map((FormularioServicoTrajetoFaculdadeModel faculdade) =>
+                Faculdade(
+                    nome: faculdade.nome.text,
+                    horarioChegada: faculdade.horarioChegada.text))
+            .toList(),
+      ),
+      contrato: Contrato(
+        descricao: formularioServico.contrato.descricao.text,
+        // urlPdf: formularioServico.contrato.urlPdf,
+        urlPdf: 'formularioServico.contrato.urlPdf',
+        politicaCancelamento: PoliticaCancelamento(
+          isRequerido:
+              formularioServico.contrato.politicaCancelamento.isRequerido,
+          mesesMinimo: formularioServico
+                  .contrato.politicaCancelamento.mesesMinimo.text.isNotEmpty
+              ? int.parse(formularioServico
+                  .contrato.politicaCancelamento.mesesMinimo.text)
+              : 0,
+        ),
+      ),
+    ).toJson();
+
+    request
+      ..remove('_id')
+      ..remove('passageiros');
+
+    var response = await ApiHelper()
+        .patch(
+      api: '/servico/$id',
+      payloadObject: request,
+      token: box.get('token'),
+    )
+        .catchError(
+      (dynamic error, dynamic stack) {
+        print(error);
+        print(stack);
+        handleErrorLogin(
+          error: error,
+          context: context,
+        );
+      },
+    );
+    if (response == null) {
+      return false;
+    } else {
+      final Map<String, dynamic> responseJson = json.decode(response);
+      final Box<dynamic> loggedUserBox = Hive.box('jwt');
+
+      await loggedUserBox.put(
+        'token',
+        responseJson['token'],
+      );
+
+      return true;
+    }
   }
 }
