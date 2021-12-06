@@ -4,6 +4,7 @@ class FormularioServicoModel {
   FormularioServicoModel({
     required this.titulo,
     required this.descricao,
+    required this.valorCobrado,
     required this.vagasDisponiveis,
     required this.veiculos,
     required this.trajeto,
@@ -12,7 +13,8 @@ class FormularioServicoModel {
 
   TextEditingController titulo;
   TextEditingController descricao;
-  TextEditingController vagasDisponiveis;
+  TextEditingController valorCobrado;
+  int vagasDisponiveis;
   List<FormularioServicoVeiculoModel> veiculos;
   FormularioServicoTrajetoModel trajeto;
   FormularioServicoContratoModel contrato;
@@ -42,26 +44,44 @@ class FormularioServicoTrajetoModel {
   FormularioServicoTrajetoModel({
     required this.descricao,
     required this.pontoInicio,
-    required this.pontoFim,
-    required this.valorCobrado,
     required this.faculdades,
   });
 
   TextEditingController descricao;
-  TextEditingController pontoInicio;
-  TextEditingController pontoFim;
-  TextEditingController valorCobrado;
+  FormularioServicoTrajetoPontoInicioModel pontoInicio;
   List<FormularioServicoTrajetoFaculdadeModel> faculdades;
+}
+
+class FormularioServicoTrajetoPontoInicioModel {
+  FormularioServicoTrajetoPontoInicioModel({
+    required this.latitude,
+    required this.longitude,
+  });
+
+  double latitude;
+  double longitude;
 }
 
 class FormularioServicoTrajetoFaculdadeModel {
   FormularioServicoTrajetoFaculdadeModel({
     required this.nome,
     required this.horarioChegada,
+    required this.localizacao,
   });
 
   TextEditingController nome;
   TextEditingController horarioChegada;
+  FormularioServicoTrajetoFaculdadeLocalizacaoModel localizacao;
+}
+
+class FormularioServicoTrajetoFaculdadeLocalizacaoModel {
+  FormularioServicoTrajetoFaculdadeLocalizacaoModel({
+    required this.latitude,
+    required this.longitude,
+  });
+
+  double latitude;
+  double longitude;
 }
 
 class FormularioServicoVeiculoModel {

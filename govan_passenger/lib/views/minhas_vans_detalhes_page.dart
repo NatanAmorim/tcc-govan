@@ -87,7 +87,7 @@ class MinhasVansDetalhesPage extends StatelessWidget {
                                           passageiro.pessoaId ==
                                           box.get('user_id'),
                                     )
-                                    .mensalidade!,
+                                    .mensalidade,
                               ),
                             ),
                           );

@@ -73,7 +73,7 @@ class _ExplorarServicoDetalhesPageState
                                 textAlign: TextAlign.left,
                               ),
                               Text(
-                                widget.servico.trajeto.valorCobrado,
+                                widget.servico.valorCobrado,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!
@@ -274,7 +274,7 @@ class _ExplorarServicoDetalhesPageState
                     onPressed: () async {
                       bool response = await controller.contratarVan(
                         context: context,
-                        servicoId: widget.servico.id,
+                        servicoId: widget.servico.id!,
                       );
 
                       if (response == true) {

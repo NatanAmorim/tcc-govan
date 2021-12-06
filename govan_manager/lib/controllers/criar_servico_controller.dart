@@ -27,23 +27,33 @@ class CriarServicoController {
     final ServicoModel request = ServicoModel(
       titulo: formularioServico.titulo.text,
       descricao: formularioServico.descricao.text,
-      vagasDisponiveis: int.parse(formularioServico.vagasDisponiveis.text),
+      valorCobrado: formularioServico.valorCobrado.text,
+      vagasDisponiveis: formularioServico.vagasDisponiveis,
       veiculos: formularioServico.veiculos
-          .map((FormularioServicoVeiculoModel veiculo) => Veiculo(
+          .map(
+            (FormularioServicoVeiculoModel veiculo) => Veiculo(
               placa: veiculo.placa.text,
               nome: veiculo.nome.text,
-              cor: veiculo.cor.text))
+              cor: veiculo.cor.text,
+            ),
+          )
           .toList(),
       trajeto: Trajeto(
         descricao: formularioServico.trajeto.descricao.text,
-        pontoInicio: formularioServico.trajeto.pontoInicio.text,
-        pontoFim: formularioServico.trajeto.pontoFim.text,
-        valorCobrado: formularioServico.trajeto.valorCobrado.text,
+        pontoInicio: Localizacao(
+          latitude: formularioServico.trajeto.pontoInicio.latitude,
+          longitude: formularioServico.trajeto.pontoInicio.longitude,
+        ),
         faculdades: formularioServico.trajeto.faculdades
-            .map((FormularioServicoTrajetoFaculdadeModel faculdade) =>
-                Faculdade(
-                    nome: faculdade.nome.text,
-                    horarioChegada: faculdade.horarioChegada.text))
+            .map(
+                (FormularioServicoTrajetoFaculdadeModel faculdade) => Faculdade(
+                      nome: faculdade.nome.text,
+                      horarioChegada: faculdade.horarioChegada.text,
+                      localizacao: Localizacao(
+                        latitude: faculdade.localizacao.latitude,
+                        longitude: faculdade.localizacao.longitude,
+                      ),
+                    ))
             .toList(),
       ),
       contrato: Contrato(
@@ -108,7 +118,8 @@ class CriarServicoController {
     final Map<String, dynamic> request = ServicoModel(
       titulo: formularioServico.titulo.text,
       descricao: formularioServico.descricao.text,
-      vagasDisponiveis: int.parse(formularioServico.vagasDisponiveis.text),
+      valorCobrado: formularioServico.valorCobrado.text,
+      vagasDisponiveis: formularioServico.vagasDisponiveis,
       veiculos: formularioServico.veiculos
           .map((FormularioServicoVeiculoModel veiculo) => Veiculo(
               placa: veiculo.placa.text,
@@ -117,14 +128,21 @@ class CriarServicoController {
           .toList(),
       trajeto: Trajeto(
         descricao: formularioServico.trajeto.descricao.text,
-        pontoInicio: formularioServico.trajeto.pontoInicio.text,
-        pontoFim: formularioServico.trajeto.pontoFim.text,
-        valorCobrado: formularioServico.trajeto.valorCobrado.text,
+        pontoInicio: Localizacao(
+          latitude: formularioServico.trajeto.pontoInicio.latitude,
+          longitude: formularioServico.trajeto.pontoInicio.longitude,
+        ),
         faculdades: formularioServico.trajeto.faculdades
-            .map((FormularioServicoTrajetoFaculdadeModel faculdade) =>
-                Faculdade(
-                    nome: faculdade.nome.text,
-                    horarioChegada: faculdade.horarioChegada.text))
+            .map(
+              (FormularioServicoTrajetoFaculdadeModel faculdade) => Faculdade(
+                nome: faculdade.nome.text,
+                horarioChegada: faculdade.horarioChegada.text,
+                localizacao: Localizacao(
+                  latitude: faculdade.localizacao.latitude,
+                  longitude: faculdade.localizacao.longitude,
+                ),
+              ),
+            )
             .toList(),
       ),
       contrato: Contrato(

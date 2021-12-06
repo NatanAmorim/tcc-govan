@@ -42,7 +42,7 @@ class _ComparecimentoPageState extends State<ComparecimentoPage> {
                       child: CheckboxListTile(
                         activeColor: Theme.of(context).accentColor,
                         title: Text(
-                          widget.passageiros[i].pessoaNome ?? 'Aluno',
+                          widget.passageiros[i].pessoaNome,
                         ),
                         value: qtdPassageiros![i],
                         onChanged: (value) {

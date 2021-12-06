@@ -69,7 +69,7 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                                 textAlign: TextAlign.left,
                               ),
                               Text(
-                                widget.servico.trajeto.valorCobrado,
+                                widget.servico.valorCobrado,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!

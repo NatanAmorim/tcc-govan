@@ -47,13 +47,13 @@ class _PagamentosPageState extends State<PagamentosPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ExpansionTile(
                       expandedAlignment: Alignment.centerLeft,
-                      title: Text(passageiro.pessoaNome!),
+                      title: Text(passageiro.pessoaNome),
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: <Widget>[
-                              for (Mensalidade item in passageiro.mensalidade!)
+                              for (Mensalidade item in passageiro.mensalidade)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
