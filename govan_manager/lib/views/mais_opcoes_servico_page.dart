@@ -83,6 +83,28 @@ class MaisOpcoesServicoPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton.icon(
+                        icon: Icon(Icons.local_atm),
+                        label: Text('Pagamentos'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PagamentosPage(
+                                servico: servico,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton.icon(
                         icon: Icon(Icons.info_outline),
                         label: Text('Detalhes do Serviço'),
                         onPressed: () {
@@ -112,28 +134,6 @@ class MaisOpcoesServicoPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => CriarServicoPage(
-                                servico: servico,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton.icon(
-                        icon: Icon(Icons.local_atm),
-                        label: Text('Pagamentos'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PagamentosPage(
                                 servico: servico,
                               ),
                             ),

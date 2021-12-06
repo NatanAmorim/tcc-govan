@@ -141,6 +141,8 @@ class _PagamentosPageState extends State<PagamentosPage> {
                                                   content: Form(
                                                     key: controller.formKey,
                                                     child: TextFormField(
+                                                      controller: controller
+                                                          .formaPagamentoTextEditingController,
                                                       validator: (value) {
                                                         if (value == null ||
                                                             value.isEmpty) {
@@ -174,25 +176,39 @@ class _PagamentosPageState extends State<PagamentosPage> {
                                                           context,
                                                           'OK',
                                                         );
-                                                        Navigator
-                                                            .pushAndRemoveUntil(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                MeusServicosPage(),
-                                                          ),
-                                                          (Route<dynamic>
-                                                                  route) =>
-                                                              false,
+                                                        final bool response =
+                                                            await controller
+                                                                .editar(
+                                                          context: context,
+                                                          servicoId: widget
+                                                              .servico.id!,
+                                                          passageiroId:
+                                                              passageiro
+                                                                  .pessoaId,
+                                                          dataVencimento: item
+                                                              .dataVencimento!
+                                                              .toIso8601String(),
                                                         );
+                                                        if (response == true) {
+                                                          Navigator
+                                                              .pushAndRemoveUntil(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  MeusServicosPage(),
+                                                            ),
+                                                            (Route<dynamic>
+                                                                    route) =>
+                                                                false,
+                                                          );
+                                                        }
                                                       },
                                                       child: const Text('OK'),
                                                     ),
                                                   ],
                                                 ),
                                               );
-                                              // TODO: marcar como pago
                                             },
                                             icon: Icon(Icons.monetization_on),
                                             label: Text('Marcar como Pago'),
