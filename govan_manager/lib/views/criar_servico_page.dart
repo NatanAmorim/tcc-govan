@@ -6,6 +6,7 @@ import 'package:govan/models/servico_model.dart';
 import 'package:govan/views/selecionar_localizacao_page.dart';
 import 'package:govan/widgets/integer_field.dart';
 import 'package:govan/widgets/text_field.dart';
+import 'package:here_sdk/core.dart';
 
 class CriarServicoPage extends StatefulWidget {
   const CriarServicoPage({
@@ -413,7 +414,7 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                     },
                   ),
                   const SizedBox(height: 10.0),
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -429,13 +430,22 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                   ),
                   const SizedBox(height: 10.0),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      GeoCoordinates? geoCoordinates = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => SelecionarLocalizacaoPage(),
                         ),
                       );
+
+                      if (geoCoordinates != null) {
+                        setState(() {
+                          controller.formularioServico.trajeto.pontoInicio
+                              .latitude = geoCoordinates.latitude;
+                          controller.formularioServico.trajeto.pontoInicio
+                              .longitude = geoCoordinates.longitude;
+                        });
+                      }
                     },
                     icon: Icon(Icons.place),
                     label: Text('Ponto de Inicío'),
@@ -477,12 +487,30 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                         ),
                         const SizedBox(height: 10.0),
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () async {
+                            GeoCoordinates? geoCoordinates =
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SelecionarLocalizacaoPage(),
+                              ),
+                            );
+
+                            if (geoCoordinates != null) {
+                              setState(() {
+                                faculdade.localizacao.latitude =
+                                    geoCoordinates.latitude;
+                                faculdade.localizacao.longitude =
+                                    geoCoordinates.longitude;
+                              });
+                            }
+                          },
                           icon: Icon(Icons.place),
                           label: Text('Local da Faculdade'),
                         ),
                         const SizedBox(height: 10.0),
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [

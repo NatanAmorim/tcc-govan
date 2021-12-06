@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:govan/models/servico_model.dart';
+import 'package:govan/views/search_example.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+
+import 'gestures_example.dart';
 
 class SelecionarLocalizacaoPage extends StatefulWidget {
   const SelecionarLocalizacaoPage({Key? key}) : super(key: key);
@@ -11,53 +15,29 @@ class SelecionarLocalizacaoPage extends StatefulWidget {
 }
 
 class _SelecionarLocalizacaoPageState extends State<SelecionarLocalizacaoPage> {
+  SearchExample? _searchExample;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('goVan - Selecionar local'),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('goVan - Selecionar local'),
+        ),
+        body: HereMap(onMapCreated: _onMapViewCreated),
       ),
-      body: HereMap(onMapCreated: _onMapViewCreated),
     );
   }
 
   void _onMapViewCreated(HereMapController hereMapController) {
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
         (MapError? error) {
-      if (error != null) {
-        print("Map scene not loaded. MapError: " + error.toString());
-        return;
+      if (error == null) {
+        GesturesExample(_showDialog, context, hereMapController);
+      } else {
+        print("Erro ao iniciar o mapa. MapError: " + error.toString());
       }
-
-      double distanceToEarthInMeters = 8000;
-      hereMapController.camera.lookAtPointWithDistance(
-        GeoCoordinates(-21.2231767, -50.4430845),
-        distanceToEarthInMeters,
-      );
     });
-  }
-
-  void _searchButtonClicked() {
-    // _searchExample?.searchButtonClicked(); //fix
-  }
-
-  void _geocodeAnAddressButtonClicked() {
-    // _searchExample?.geocodeAnAddressButtonClicked(); //fix
-  }
-
-  // A helper method to add a button on top of the HERE map.
-  Align button(String buttonLabel, Function callbackFunction) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.lightBlueAccent,
-          onPrimary: Colors.white,
-        ),
-        onPressed: () => callbackFunction(),
-        child: Text(buttonLabel, style: TextStyle(fontSize: 20)),
-      ),
-    );
   }
 
   // A helper method to show a dialog.
