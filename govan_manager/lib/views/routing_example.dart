@@ -52,9 +52,10 @@ class RoutingExample {
     }
   }
 
-  Future<void> addRoute() async {
-    var startGeoCoordinates = _createRandomGeoCoordinatesInViewport();
-    var destinationGeoCoordinates = _createRandomGeoCoordinatesInViewport();
+  Future<void> addRoute(
+    GeoCoordinates startGeoCoordinates,
+    GeoCoordinates destinationGeoCoordinates,
+  ) async {
     var startWaypoint = Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint = Waypoint.withDefaults(destinationGeoCoordinates);
 
@@ -97,19 +98,20 @@ class RoutingExample {
     int estimatedTravelTimeInSeconds = route.durationInSeconds;
     int lengthInMeters = route.lengthInMeters;
 
-    String routeDetails = 'Travel Time: ' +
+    String routeDetails = 'Tempo de Viagem: ' +
         _formatTime(estimatedTravelTimeInSeconds) +
-        ', Length: ' +
+        '\n'
+            'Distância: ' +
         _formatLength(lengthInMeters);
 
-    _showDialog('Route Details', '$routeDetails');
+    _showDialog('Detalhes da Rota', '$routeDetails');
   }
 
   String _formatTime(int sec) {
     int hours = sec ~/ 3600;
     int minutes = (sec % 3600) ~/ 60;
 
-    return '$hours:$minutes min';
+    return '$hours:$minutes min\n';
   }
 
   String _formatLength(int meters) {

@@ -5,6 +5,8 @@ import 'package:govan/views/comparecimento_page.dart';
 import 'package:govan/views/criar_servico_page.dart';
 import 'package:govan/views/detalhes_servico_page.dart';
 import 'package:govan/views/pagamentos_page.dart';
+import 'package:govan/views/rota_viagem_page.dart';
+import 'package:here_sdk/core.dart';
 
 class MaisOpcoesServicoPage extends StatelessWidget {
   MaisOpcoesServicoPage({
@@ -42,14 +44,23 @@ class MaisOpcoesServicoPage extends StatelessWidget {
                         icon: Icon(Icons.place_outlined),
                         label: Text('Iniciar Rota'),
                         onPressed: () {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => Renomear(
-                          //         servico: servico,
-                          //       ),
-                          //     ),
-                          //   );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RotaViagemPage(
+                                startGeoCoordinates: GeoCoordinates(
+                                  servico.trajeto.pontoInicio.latitude!,
+                                  servico.trajeto.pontoInicio.longitude!,
+                                ),
+                                destinationGeoCoordinates: GeoCoordinates(
+                                  servico.trajeto.faculdades[0].localizacao!
+                                      .latitude!,
+                                  servico.trajeto.faculdades[0].localizacao!
+                                      .longitude!,
+                                ),
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),

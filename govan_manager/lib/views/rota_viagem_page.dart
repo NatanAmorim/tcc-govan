@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:govan/views/routing_example.dart';
+import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 
 class RotaViagemPage extends StatefulWidget {
-  const RotaViagemPage({Key? key}) : super(key: key);
+  const RotaViagemPage({
+    Key? key,
+    required this.startGeoCoordinates,
+    required this.destinationGeoCoordinates,
+  }) : super(key: key);
+
+  final GeoCoordinates startGeoCoordinates;
+  final GeoCoordinates destinationGeoCoordinates;
 
   @override
   _RotaViagemPageState createState() => _RotaViagemPageState();
@@ -13,6 +21,15 @@ class _RotaViagemPageState extends State<RotaViagemPage> {
   RoutingExample? _routingExample;
 
   @override
+  void initState() {
+    super.initState();
+    _routingExample?.addRoute(
+      widget.startGeoCoordinates,
+      widget.destinationGeoCoordinates,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -20,11 +37,17 @@ class _RotaViagemPageState extends State<RotaViagemPage> {
           title: Text('goVan - Rota Viagem'),
         ),
         body: HereMap(onMapCreated: _onMapCreated),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.navigation),
+          tooltip: "Iniciar Navegação",
+          onPressed: _addRouteButtonClicked,
+        ),
       ),
     );
   }
 
   void _onMapCreated(HereMapController hereMapController) {
+    hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 1);
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
         (MapError? error) {
       if (error == null) {
@@ -36,7 +59,10 @@ class _RotaViagemPageState extends State<RotaViagemPage> {
   }
 
   void _addRouteButtonClicked() {
-    _routingExample?.addRoute();
+    _routingExample?.addRoute(
+      widget.startGeoCoordinates,
+      widget.destinationGeoCoordinates,
+    );
   }
 
   void _clearMapButtonClicked() {

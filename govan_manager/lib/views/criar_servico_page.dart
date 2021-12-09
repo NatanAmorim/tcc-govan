@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:govan/controllers/criar_servico_controller.dart';
 import 'package:govan/models/formulario_servico_model.dart';
@@ -7,6 +12,7 @@ import 'package:govan/views/selecionar_localizacao_page.dart';
 import 'package:govan/widgets/integer_field.dart';
 import 'package:govan/widgets/text_field.dart';
 import 'package:here_sdk/core.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CriarServicoPage extends StatefulWidget {
   const CriarServicoPage({
@@ -22,6 +28,7 @@ class CriarServicoPage extends StatefulWidget {
 
 class _CriarServicoPageState extends State<CriarServicoPage> {
   final CriarServicoController controller = CriarServicoController();
+  File? imagemServico;
 
   @override
   void initState() {
@@ -81,8 +88,8 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
             text: widget.servico!.trajeto.descricao,
           ),
           pontoInicio: FormularioServicoTrajetoPontoInicioModel(
-            latitude: 0.0,
-            longitude: 0.0,
+            latitude: 0.1,
+            longitude: 0.1,
           ),
           faculdades: widget.servico!.trajeto.faculdades
               .map(
@@ -95,8 +102,8 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                   ),
                   localizacao:
                       FormularioServicoTrajetoFaculdadeLocalizacaoModel(
-                    latitude: 0.0,
-                    longitude: 0.0,
+                    latitude: 0.1,
+                    longitude: 0.1,
                   ),
                 ),
               )
@@ -133,16 +140,16 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
         trajeto: FormularioServicoTrajetoModel(
           descricao: TextEditingController(),
           pontoInicio: FormularioServicoTrajetoPontoInicioModel(
-            latitude: 0.0,
-            longitude: 0.0,
+            latitude: 0.1,
+            longitude: 0.1,
           ),
           faculdades: <FormularioServicoTrajetoFaculdadeModel>[
             FormularioServicoTrajetoFaculdadeModel(
               nome: TextEditingController(),
               horarioChegada: TextEditingController(),
               localizacao: FormularioServicoTrajetoFaculdadeLocalizacaoModel(
-                latitude: 0.0,
-                longitude: 0.0,
+                latitude: 0.1,
+                longitude: 0.1,
               ),
             )
           ],
@@ -171,6 +178,16 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  const SizedBox(height: 10.0),
+                  imagemServico != null
+                      ? Image.file(imagemServico!)
+                      : Icon(Icons.image, size: 160),
+                  const SizedBox(height: 10.0),
+                  ElevatedButton.icon(
+                    onPressed: () async => pickImage(),
+                    icon: Icon(Icons.image),
+                    label: Text('Foto do Anúncio'),
+                  ),
                   const SizedBox(height: 20.0),
                   TextFieldWidget(
                     fieldName: "Título",
@@ -373,12 +390,6 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 10.0),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.upload),
-                          label: Text('Enviar foto do Veículo'),
-                        ),
                       ],
                     ),
                   ),
@@ -537,8 +548,8 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
                             horarioChegada: TextEditingController(),
                             localizacao:
                                 FormularioServicoTrajetoFaculdadeLocalizacaoModel(
-                              latitude: 0.0,
-                              longitude: 0.0,
+                              latitude: 0.1,
+                              longitude: 0.1,
                             ),
                           ),
                         );
@@ -580,5 +591,25 @@ class _CriarServicoPageState extends State<CriarServicoPage> {
         ),
       ),
     );
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        return;
+      }
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.imagemServico = imageTemporary;
+      });
+      List<int> imageBytes = imagemServico!.readAsBytesSync();
+      String imageB64 = base64Encode(imageBytes);
+      Uint8List decoded = base64Decode(imageB64);
+      print(imageB64);
+    } on PlatformException catch (e) {
+      print('Falha em obter imagem');
+    }
   }
 }
