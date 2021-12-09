@@ -15,8 +15,8 @@
         android:label="govan_manager"
         android:icon="@mipmap/ic_launcher">
 
-        <meta-data android:name="com.here.sdk.access_key_id" android:value="I_8biUDhn3KxEd5WbTpBPw"/>
-        <meta-data android:name="com.here.sdk.access_key_secret" android:value="Eyn8VgZ_D0RWZt24NdssJLG654xMQ7pEiqVXhSEOg-Z7UyiKEXsj4ZaAm9Q2n3MVlAAhpzn14xxiiZoYebfklg"/>
+        <meta-data android:name="com.here.sdk.access_key_id" android:value="YOUR_ACCESS_KEY_ID"/>
+        <meta-data android:name="com.here.sdk.access_key_secret" android:value="YOUR_ACCESS_KEY_SECRET"/>
 
         <activity
             android:name=".MainActivity"
