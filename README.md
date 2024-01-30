@@ -1,19 +1,35 @@
-# goVan (TCC - Front-End)
+# goVan TCC - Front-End (Public archive)
 
-TCC para UNIP - ARAÇATUBA 2021, curso de Ciência da Computação.
+![license](https://img.shields.io/badge/license-GPL--2.0-green.svg)
+
+## About
+
+GO VAN: Software de locomoção urbana para transportador e clientes
+
+- (PT-BR) Trabalho de conclusão de Curso (TCC) de Ciência da Computação na UNIP - Universidade Paulista em Araçatuba-SP.
+- (EN-US) Final Paper for my Computer Science Course at UNIP - Universidade Paulista at Araçatuba-SP, Brazil.
+
+## Contributors
+
+- Michael Dionisio
+- Natan Amorim S. G. de Moraes
+- Rafael Pereira de Moura
+
+## Concept
+
+### GoVan Passenger
+
+<h1 align="center">
+    <img alt="GoVan Passenger (Figma)" title="GoVan Passenger (Figma)" src=".github/govan_passenger.png" />
+</h1>
+
+### GoVan Manager
+
+<h1 align="center">
+    <img alt="GoVan Manager (Figma)" title="GoVan Manager (Figma)" src=".github/govan_manager.png" />
+</h1>
 
 ## API
 
-- Necessita da [goVan API - Rafael Moura](https://github.com/rafaelmoura3/APIGoVan)
-
-## Pull Requests
-
-- Descreva de forma clara o que deve ser consertado ou adicionado.
-- Tente minimizar a quantidade de alterações no código, use estilos/funções já existentes.
-
-## Corrigindo Bugs
-
-Para facilitar a resposta a problemas por favor siga essas orientações quando for explicar o problema.
-
-- Descreva o que deve ser consertado, se for relevante anexe logs/screenshots.
-- Descreva como reproduzir o bug, para que possa ser consertado.
+- (EN-US) needs [goVan API - Rafael Moura](https://github.com/rafaelmoura3/APIGoVan) to work.
+- (PT-BR) Necessita da [goVan API - Rafael Moura](https://github.com/rafaelmoura3/APIGoVan) para funcionar.
