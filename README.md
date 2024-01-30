@@ -1,6 +1,6 @@
 # goVan TCC - Front-End (Public archive)
 
-![license](https://img.shields.io/badge/license-GPL--2.0-green.svg)
+![license](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 ## About
 
